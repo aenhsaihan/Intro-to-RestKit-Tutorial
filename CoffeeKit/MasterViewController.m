@@ -7,13 +7,15 @@
 //
 
 #import "MasterViewController.h"
+#import <RestKit/RestKit.h>
+#import "Venue.h"
 
 #define kCLIENTID @"BMG10QGXVXGLM3BM2TVOJRRZQ0JLMXARAMJU5PST42JV100T"
 #define kCLIENTSECRET @"LRY2BGX2T2PRL53OOLLJPPWMEJ31PAEZFQAEUG0J2GMHE3Y5"
 
 @interface MasterViewController ()
 
-@property NSMutableArray *objects;
+@property (nonatomic, strong) NSArray *venues;
 @end
 
 @implementation MasterViewController
@@ -24,6 +26,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self configureRestKit];
+    [self loadVenues];
     // Do any additional setup after loading the view, typically from a nib.
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
 
@@ -31,18 +36,55 @@
     self.navigationItem.rightBarButtonItem = addButton;
 }
 
+-(void)configureRestKit
+{
+    // initialize AFNetworking HTTPClient
+    NSURL *baseURL = [NSURL URLWithString:@"https://api.foursquare.com"];
+    AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:baseURL];
+    
+    // initialize RestKit
+    RKObjectManager *objectManager = [[RKObjectManager alloc] initWithHTTPClient:client];
+    
+    // setup object mappings
+    RKObjectMapping *venueMapping = [RKObjectMapping mappingForClass:[Venue class]];
+    [venueMapping addAttributeMappingsFromArray:@[@"name"]];
+    
+    // register mappings with the provider using a response descriptor
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:venueMapping
+                                                                                            method:RKRequestMethodGET
+                                                                                       pathPattern:@"/v2/venues/search"
+                                                                                           keyPath:@"response.venues"
+                                                                                       statusCodes:[NSIndexSet indexSetWithIndex:200]];
+    [objectManager addResponseDescriptor:responseDescriptor];
+    
+}
+
+-(void)loadVenues
+{
+    NSString *latLon = @"37.33, -122.03"; // approximate latLon of Apple HQ
+    NSString *clientID = kCLIENTID;
+    NSString *clientSecret = kCLIENTSECRET;
+    
+    NSDictionary *queryParams = @{@"ll" : latLon,
+                                  @"client_id" : clientID,
+                                  @"client_secret" : clientSecret,
+                                  @"categoryId" : @"4bf58dd8d48988d1e0931735",
+                                  @"v" : @"20140118"
+                                  };
+    
+    [[RKObjectManager sharedManager] getObjectsAtPath:@"/v2/venues/search"
+                                           parameters:queryParams
+                                              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                                  _venues = mappingResult.array;
+                                                  [self.tableView reloadData];
+                                              } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                                  NSLog(@"What do you mean by 'there is no coffee?' : %@", error);
+                                              }];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)insertNewObject:(id)sender {
-    if (!self.objects) {
-        self.objects = [[NSMutableArray alloc] init];
-    }
-    [self.objects insertObject:[NSDate date] atIndex:0];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - Table View
@@ -52,14 +94,14 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.objects.count;
+    return self.venues.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
-    NSDate *object = self.objects[indexPath.row];
-    cell.textLabel.text = [object description];
+    Venue *venue = _venues[indexPath.row];
+    cell.textLabel.text = venue.name;
     return cell;
 }
 
@@ -68,13 +110,5 @@
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [self.objects removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
-    }
-}
 
 @end
