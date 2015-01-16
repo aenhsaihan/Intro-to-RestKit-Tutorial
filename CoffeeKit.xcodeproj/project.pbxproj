@@ -16,6 +16,7 @@
 		B2D57CD11A695AEC00C2AAC4 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B2D57CCF1A695AEC00C2AAC4 /* LaunchScreen.xib */; };
 		B2D57CDD1A695AEC00C2AAC4 /* CoffeeKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B2D57CDC1A695AEC00C2AAC4 /* CoffeeKitTests.m */; };
 		B2D57CE81A69616A00C2AAC4 /* Venue.m in Sources */ = {isa = PBXBuildFile; fileRef = B2D57CE71A69616A00C2AAC4 /* Venue.m */; };
+		B2D57CEB1A6968FD00C2AAC4 /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = B2D57CEA1A6968FD00C2AAC4 /* Location.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,8 @@
 		B2D57CDC1A695AEC00C2AAC4 /* CoffeeKitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CoffeeKitTests.m; sourceTree = "<group>"; };
 		B2D57CE61A69616A00C2AAC4 /* Venue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Venue.h; sourceTree = "<group>"; };
 		B2D57CE71A69616A00C2AAC4 /* Venue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Venue.m; sourceTree = "<group>"; };
+		B2D57CE91A6968FD00C2AAC4 /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
+		B2D57CEA1A6968FD00C2AAC4 /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
 		CA4D11B3CB84B342150F20C0 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,6 +108,8 @@
 				B2D57CC51A695AEC00C2AAC4 /* MasterViewController.m */,
 				B2D57CE61A69616A00C2AAC4 /* Venue.h */,
 				B2D57CE71A69616A00C2AAC4 /* Venue.m */,
+				B2D57CE91A6968FD00C2AAC4 /* Location.h */,
+				B2D57CEA1A6968FD00C2AAC4 /* Location.m */,
 				B2D57CCA1A695AEC00C2AAC4 /* Main.storyboard */,
 				B2D57CCD1A695AEC00C2AAC4 /* Images.xcassets */,
 				B2D57CCF1A695AEC00C2AAC4 /* LaunchScreen.xib */,
@@ -284,6 +289,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2D57CC31A695AEC00C2AAC4 /* AppDelegate.m in Sources */,
+				B2D57CEB1A6968FD00C2AAC4 /* Location.m in Sources */,
 				B2D57CE81A69616A00C2AAC4 /* Venue.m in Sources */,
 				B2D57CC61A695AEC00C2AAC4 /* MasterViewController.m in Sources */,
 				B2D57CC01A695AEC00C2AAC4 /* main.m in Sources */,

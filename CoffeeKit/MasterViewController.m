@@ -9,6 +9,7 @@
 #import "MasterViewController.h"
 #import <RestKit/RestKit.h>
 #import "Venue.h"
+#import "Location.h"
 
 #define kCLIENTID @"BMG10QGXVXGLM3BM2TVOJRRZQ0JLMXARAMJU5PST42JV100T"
 #define kCLIENTSECRET @"LRY2BGX2T2PRL53OOLLJPPWMEJ31PAEZFQAEUG0J2GMHE3Y5"
@@ -57,6 +58,15 @@
                                                                                        statusCodes:[NSIndexSet indexSetWithIndex:200]];
     [objectManager addResponseDescriptor:responseDescriptor];
     
+    // define location object mapping
+    RKObjectMapping *locationMapping = [RKObjectMapping mappingForClass:[Location class]];
+    [locationMapping addAttributeMappingsFromArray:@[@"address", @"city", @"country", @"crossStreet", @"postalCode", @"state", @"distance", @"lat", @"lng"]];
+    
+    // define relationship mapping
+    [venueMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"location"
+                                                                                 toKeyPath:@"location"
+                                                                               withMapping:locationMapping]];
+    
 }
 
 -(void)loadVenues
@@ -102,6 +112,7 @@
 
     Venue *venue = _venues[indexPath.row];
     cell.textLabel.text = venue.name;
+    cell.detailTextLabel.text = [NSString stringWithFormat:@"%.0fm", venue.location.distance.floatValue];
     return cell;
 }
 
